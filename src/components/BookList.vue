@@ -1,7 +1,7 @@
 <template>
 <div>
     <h1>{{title}}</h1>
-    <input type="text" v-model="searchInput" placeholder="Search Books">
+    <input type="text" v-model="searchInput" placeholder="Search Books"/>
     <ul>
         <book-item v-for='book in searchedBooks' :key='book.id' :book='book'></book-item>
     </ul>
@@ -29,17 +29,10 @@ import BookForm from "./BookForm";
 
 export default {
     name: "BookList",
-    components: {
-        BookItem,
-        BookForm
-    },
     data() {
         return {
             title: "All Books",
             states: ["Want to Read", "Read", "Reading"],
-            filters: ["bought", "borrowed"],
-            holding: "bought",
-            searchInput: "",
             books: [{
                     title: "Self-Reliance",
                     author: "Ralph Waldo Emerson",
@@ -58,31 +51,38 @@ export default {
                     finishedReading: true,
                     ownership: "borrowed"
                 }
-            ]
+            ],
+            filters: ["bought", "borrowed"],
+            holding: "bought",
+            searchInput: "",
         };
+    },
+    components: {
+      BookItem,
+      BookForm
     },
     computed: {
         filteredBooks() {
-            return _.filter(this.books, ["ownership", this.holding])
+            return _.filter(this.books, ["ownership", this.holding]);
         },
         searchedBooks() {
             const searchFilter = book => {
                 return book.title.toLowerCase().match(this.searchInput.toLowerCase());
-            }
+            };
             return _.filter(this.books, searchFilter);
         }
     },
     methods: {
-        appendBook(bookData) {
-            this.books.push({
-                title: bookData.bookTitle,
-                author: bookData.bookAuthor,
-                finishedReading: bookData.finishedReading,
-                ownership: bookData.ownership
-            });
+      appendBook(bookData) {
+        this.books.push({
+            title: bookData.bookTitle,
+            author: bookData.bookAuthor,
+            finishedReading: bookData.finishedReading,
+            ownership: bookData.ownership
+          });
         }
     }
-};
+}
 </script>
 
 <style>
